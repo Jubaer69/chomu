@@ -5,6 +5,7 @@ import { Link } from 'react-router-dom'
 function Home() {
 
     const [data, setData] = useState([])
+    const [jub, setJub] = useState(false)
 
     useEffect(() => {
         axios.get(`${import.meta.env.VITE_BACKEND_URL}/api/v4/post/getallposts`)
@@ -12,17 +13,25 @@ function Home() {
             if(d.data.success){
                 setData(d.data.allposts)
                 console.log(d.data.allposts)
+                setJub(true)
+            }
+            else{
+                setJub(false)
             }
         })
-        .catch((err) => console.log(err))
+        .catch((err) => {
+            console.log(err)
+            setJub(false)
+        })
       }, [])
 
   return (
     <div className='w-full p-[20px_4%] lg:p-[40px_10%]'>
 
 
-        {
-            data.length > 0 ? <>
+       {
+        jub ?  
+           ( data.length > 0 ? <>
             <div className='w-full flex items-center justify-center mt-8'>
         <h2 className='inline-block text-[20px]  text-semibold bg-gradient-to-tr from-violet-500 to-violet-200 bg-clip-text text-transparent'>My Writings</h2>
         </div>
@@ -42,10 +51,13 @@ function Home() {
             : 
             <div className='pt-10'>
                 <p className='text-center'>You don't have any post. <Link to={'/createpost'} className='text-cyan-300 underline'>Create post</Link></p>
-            </div>
+            </div>)
+
+            : <p>Loading...</p>
 
            
-        }
+        
+       }
     </div>
   )
 }
