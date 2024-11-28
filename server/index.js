@@ -30,6 +30,6 @@ app.use('/api/v4/post', postRouter)
 
 app.listen(PORT, () => {
     database()
-    console.log(`Server running on port ${PORT}`)
+    console.log(`${process.env.CLIENT_URL}`)
 })
 
